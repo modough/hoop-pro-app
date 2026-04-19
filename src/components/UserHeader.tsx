@@ -1,14 +1,12 @@
 import { User } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { trainingLevels } from "@/data/trainingData";
-import { useMemo } from "react";
+
 import ProgressBar from "./ProgressBar";
 
-const UserHeader = () => {
-  const completedDrills: Set<string> = useMemo(() => {
-    const saved = localStorage.getItem("completedDrills");
-    return saved ? new Set(JSON.parse(saved)) : new Set();
-  }, []);
+
+const UserHeader = ({ completedDrills }: { completedDrills: Set<string> }) => {
+  
 
   const totalDrills = trainingLevels.reduce((sum, lvl) => sum + lvl.drills.length, 0);
   const totalCompleted = trainingLevels.reduce(

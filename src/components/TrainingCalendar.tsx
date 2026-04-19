@@ -16,7 +16,7 @@ const TrainingCalendar = () => {
   const dailyLogs = useMemo(() => getDailyLogs(year, month), [getDailyLogs, year, month]);
   const monthTotal = useMemo(() => getMonthTotal(year, month), [getMonthTotal, year, month]);
   const maxMinutes = useMemo(() => Math.max(...dailyLogs.map((d) => d.minutes), 1), [dailyLogs]);
-
+console.log("dailyLogs", dailyLogs)
   const prev = () => {
     if (month === 0) { setMonth(11); setYear(year - 1); }
     else setMonth(month - 1);
