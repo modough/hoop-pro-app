@@ -6,7 +6,7 @@ function PageWrapper({ children }: { children: React.ReactNode }) {
   const { completed: completedDrills } = useCompletedDrills();
 
   return (
-    <div>
+    <div className='w-full h-full'>
       <UserHeader completedDrills={completedDrills}/>
       {children }
     </div>

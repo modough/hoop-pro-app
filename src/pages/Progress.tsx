@@ -1,7 +1,6 @@
 import { trainingLevels } from "@/data/trainingData";
 import ProgressBar from "@/components/ProgressBar";
 import { Trophy, Target, Zap, Star } from "lucide-react";
-import UserHeader from "@/components/UserHeader";
 import { useMemo } from "react";
 import SemiCircleProgress from "@/components/SemiCircleProgress";
 import heroImage from "@/assets/hero-basketball.jpg";
@@ -12,7 +11,7 @@ import PageWrapper from "@/components/PageWrapper";
 const levelIcons = [Target, Zap, Star, Trophy];
 
 const Progress = () => {
-   const { completed: completedDrills } = useCompletedDrills();
+  const { completed: completedDrills } = useCompletedDrills();
 
   const totalDrills = trainingLevels.reduce(
     (sum, lvl) => sum + lvl.drills.length,
@@ -42,21 +41,19 @@ const Progress = () => {
   const radius = 55;
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (overallPct / 100) * circumference;
-  
 
   return (
     <PageWrapper>
       <div>
-      
         <div className="px-4 py-6">
           {/* Overall Circular Progress */}
           <div className="flex flex-col items-center mb-8">
-            <div className="relative w-42 h-42">
+            <div className="relative w-46 h-46">
               <img
-                  src={heroImage}
-                  alt="Trophy"
-                  className=" absolute w-full h-full overflow-hidden object-cover rounded-full opacity-50"
-                />
+                src={heroImage}
+                alt="Trophy"
+                className=" absolute w-full h-full overflow-hidden object-cover rounded-full opacity-50"
+              />
               <svg className="w-full h-full -rotate-90" viewBox="0 0 120 120">
                 <circle
                   cx="60"
@@ -80,7 +77,6 @@ const Progress = () => {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-      
                 <span className="text-2xl font-black text-foreground">
                   {overallPct}%
                 </span>
@@ -120,7 +116,10 @@ const Progress = () => {
                       {completed}/{level.drills.length}
                     </span>
                   </div>
-                  <ProgressBar current={completed} total={level.drills.length} />
+                  <ProgressBar
+                    current={completed}
+                    total={level.drills.length}
+                  />
                 </div>
               );
             })}
@@ -137,7 +136,11 @@ const Progress = () => {
                   <div className="text-xs text-muted-foreground mb-2 font-medium">
                     {cat}
                   </div>
-                  <SemiCircleProgress current={completed} total={total} label={cat} />
+                  <SemiCircleProgress
+                    current={completed}
+                    total={total}
+                    label={cat}
+                  />
                 </div>
               );
             })}

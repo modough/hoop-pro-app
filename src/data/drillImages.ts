@@ -39,6 +39,7 @@ import drill48 from "@/assets/drills/drill-4-8.jpg";
 import drill49 from "@/assets/drills/drill-4-9.jpg";
 import drill410 from "@/assets/drills/drill-4-10.jpg";
 
+
 export const drillImages: Record<string, string> = {
   "1-1": drill11,
   "1-2": drill12,

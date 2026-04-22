@@ -11,6 +11,7 @@ const Profile = () => {
     return saved ? new Set(JSON.parse(saved)) : new Set();
   }, []);
   const { user, signOut } = useAuth();
+  console.log('user', user)
   const navigate = useNavigate();
   const totalDrills = trainingLevels.reduce(
     (sum, lvl) => sum + lvl.drills.length,
@@ -62,7 +63,7 @@ const Profile = () => {
         <div className="h-20 w-20 rounded-full bg-gradient-fire flex items-center justify-center mb-3 shadow-glow">
           <User className="h-10 w-10 text-primary-foreground" />
         </div>
-        <div className="text-xl font-bold">Basketball Trainee</div>
+        <div className="text-xl font-bold capitalize">{user.email.split(".")[0]}</div>
         <div className="text-sm text-muted-foreground mt-1">{rank}</div>
       </div>
 
