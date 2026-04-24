@@ -210,9 +210,27 @@ const DrillCard = ({
               </span>
             </div>
 
-            <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-              {description}
-            </p>
+            <div className="relative">
+              {/* Vertical line */}
+              <div className="absolute left-3 top-0 bottom-0 w-[2px] bg-primary" />
+
+              {description
+                .split(".")
+                .filter((step) => step.trim() !== "")
+                .map((step, index) => (
+                  <div key={index} className="relative flex gap-4 mb-4">
+                    {/* Number circle */}
+                    <div className="relative z-10 flex items-center justify-center h-6 min-w-6 rounded-full bg-primary text-white text-xs font-bold">
+                      {index + 1}
+                    </div>
+
+                    {/* Text */}
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                      {step.trim()}.
+                    </p>
+                  </div>
+                ))}
+            </div>
 
             <div className="flex items-center gap-3 flex-wrap mb-4">
               <button
@@ -240,9 +258,9 @@ const DrillCard = ({
 
           {/* Timer — always visible */}
           <div className="rounded-lg bg-secondary/50 border border-border p-4">
-           <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium mb-3">
-                drill timer
-              </div>
+            <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium mb-3">
+              drill timer
+            </div>
             <div
               className={`text-4xl font-mono font-bold text-center mb-3 ${
                 timeLeft === 0

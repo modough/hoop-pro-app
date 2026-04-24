@@ -29,12 +29,13 @@ const Training = () => {
     trainingLevels[index].drills.every((d) => completedDrills.has(d.id));
 
   const currentLevel = trainingLevels[activeLevel];
-  const completedInLevel = currentLevel.drills.filter((d) => completedDrills.has(d.id)).length;
+  const completedInLevel = currentLevel.drills.filter((d) =>
+    completedDrills.has(d.id),
+  ).length;
 
   if (selectedDrill) {
     return (
       <PageWrapper>
-        
         <div className="relative w-full h-[86vh] flex flex-1 fixed">
           <button
             onClick={() => setSelectedDrill(null)}
@@ -42,7 +43,9 @@ const Training = () => {
           >
             <ArrowLeft className="h-4 w-4 " /> Back
           </button>
-          <span className={`flex items-center gap-1 absolute z-10 top-4 right-4 ${difficultyColor[selectedDrill.difficulty]}`}>
+          <span
+            className={`flex items-center gap-1 absolute z-10 top-4 right-4 ${difficultyColor[selectedDrill.difficulty]}`}
+          >
             <Flame className="h-3.5 w-3.5" /> {selectedDrill.difficulty}
           </span>
           <DrillCard
@@ -62,14 +65,15 @@ const Training = () => {
 
   return (
     <PageWrapper>
-     
       <div className="px-4 py-6">
-        <div className="text-center mb-6">
+        <div className=" text-start mb-6">
           <h1 className="text-2xl font-black mb-1">Training Program</h1>
-          <p className="text-sm text-muted-foreground">Complete each level to unlock the next</p>
+          <p className="text-sm text-muted-foreground">
+            Complete each level to unlock the next
+          </p>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-3 mb-4 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto py-3 mb-4 scrollbar-hide">
           {trainingLevels.map((level, i) => {
             const unlocked = isLevelUnlocked(i);
             const completed = isLevelCompleted(i);
@@ -81,12 +85,13 @@ const Training = () => {
                   activeLevel === i
                     ? "bg-gradient-fire text-primary-foreground shadow-glow"
                     : unlocked
-                    ? "bg-secondary text-secondary-foreground"
-                    : "bg-muted text-muted-foreground opacity-50"
+                      ? "bg-secondary text-secondary-foreground"
+                      : "bg-muted text-muted-foreground opacity-50"
                 } ${completed ? "ring-2 ring-green-500/50" : ""}`}
                 disabled={!unlocked}
               >
-                {completed ? "✓ " : ""}{level.title}
+                <span className="text-green-500/50">{completed ? "✓ " : ""}</span>
+                {level.title}
               </button>
             );
           })}
@@ -98,10 +103,15 @@ const Training = () => {
             return <Icon className="h-5 w-5 text-primary" />;
           })()}
           <h2 className="text-lg font-bold flex-1">{currentLevel.title}</h2>
-          <span className="text-xs text-muted-foreground">{completedInLevel}/{currentLevel.drills.length}</span>
+          <span className="text-xs text-muted-foreground">
+            {completedInLevel}/{currentLevel.drills.length}
+          </span>
         </div>
         <div className="mb-4">
-          <ProgressBar current={completedInLevel} total={currentLevel.drills.length} />
+          <ProgressBar
+            current={completedInLevel}
+            total={currentLevel.drills.length}
+          />
         </div>
 
         <div className="space-y-3">

@@ -17,7 +17,7 @@ export interface TrainingLevel {
 export const trainingLevels: TrainingLevel[] = [
   {
     id: 1,
-    title: "Beginner Fundamentals",
+    title: "Beginner",
     description: "Build your foundation with basic ball handling, shooting form, and footwork essentials.",
     drills: [
       { id: "1-1", title: "Stationary Ball Handling", description: "Practice pound dribbles, crossovers, and between-the-legs while standing still. Focus on keeping your head up and controlling the ball with your fingertips. Do 30 reps of each move with each hand.", duration: "10 min", difficulty: "Easy", category: "Dribbling" },
@@ -34,7 +34,7 @@ export const trainingLevels: TrainingLevel[] = [
   },
   {
     id: 2,
-    title: "Intermediate Skills",
+    title: "Intermediate",
     description: "Level up with combo moves, mid-range shooting, and transition play.",
     drills: [
       { id: "2-1", title: "Two-Ball Dribbling", description: "Dribble two basketballs simultaneously. Start with same-time dribbles, then alternate. Walk forward and backward while maintaining control.", duration: "12 min", difficulty: "Medium", category: "Dribbling" },
@@ -51,7 +51,7 @@ export const trainingLevels: TrainingLevel[] = [
   },
   {
     id: 3,
-    title: "Advanced Training",
+    title: "Advanced",
     description: "Master complex moves, three-point shooting, and advanced defensive concepts.",
     drills: [
       { id: "3-1", title: "Combo Move Attacks", description: "Chain together 3+ dribble moves into an attack sequence: hesitation → crossover → spin → finish. Practice 5 different combos, 10 reps each.", duration: "20 min", difficulty: "Hard", category: "Dribbling" },

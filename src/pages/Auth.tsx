@@ -12,6 +12,7 @@ import { Flame } from "lucide-react";
 const authSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email" }).max(255),
   password: z.string().min(6, { message: "Min 6 characters" }).max(100),
+  displayName: z.string().trim().min(2, { message: "Min 2 characters" }).max(40).optional(),
 });
 
 const Auth = () => {
@@ -20,6 +21,7 @@ const Auth = () => {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
@@ -31,7 +33,11 @@ const Auth = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const parsed = authSchema.safeParse({ email, password });
+    const parsed = authSchema.safeParse({
+      email,
+      password,
+      ...(mode === "signup" ? { displayName } : {}),
+    });
     if (!parsed.success) {
       toast({ title: "Invalid input", description: parsed.error.errors[0].message, variant: "destructive" });
       return;
@@ -42,7 +48,10 @@ const Auth = () => {
         const { error } = await supabase.auth.signUp({
           email: parsed.data.email,
           password: parsed.data.password,
-          options: { emailRedirectTo: `${window.location.origin}/` },
+          options: {
+            emailRedirectTo: `${window.location.origin}/`,
+            data: { display_name: parsed.data.displayName ?? "" },
+          },
         });
         if (error) throw error;
         toast({ title: "Account created", description: "You're signed in!" });
@@ -79,6 +88,21 @@ const Auth = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {mode === "signup" && (
+            <div className="space-y-1.5">
+              <Label htmlFor="displayName">Pseudo</Label>
+              <Input
+                id="displayName"
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+              
+                required
+                minLength={2}
+                maxLength={40}
+              />
+            </div>
+          )}
           <div className="space-y-1.5">
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required maxLength={255} />
