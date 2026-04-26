@@ -7,12 +7,17 @@ import heroImage from "@/assets/hero-basketball.jpg";
 import TrainingCalendar from "@/components/TrainingCalendar";
 import { useCompletedDrills } from "@/hooks/useCompletedDrills";
 import PageWrapper from "@/components/PageWrapper";
+import StreakCard from "@/components/StreakCard";
+import AchievementsGrid from "@/components/AchievementsGrid";
+import { useStreak } from "@/hooks/useStreak";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const levelIcons = [Target, Zap, Star, Trophy];
 
 const Progress = () => {
+  const { t } = useLanguage();
   const { completed: completedDrills } = useCompletedDrills();
-
+  const streak = useStreak();
   const totalDrills = trainingLevels.reduce(
     (sum, lvl) => sum + lvl.drills.length,
     0,
@@ -22,6 +27,9 @@ const Progress = () => {
       sum + lvl.drills.filter((d) => completedDrills.has(d.id)).length,
     0,
   );
+  const levelsCompleted = trainingLevels.filter((lvl) =>
+    lvl.drills.every((d) => completedDrills.has(d.id)),
+  ).length;
 
   const categories = useMemo(() => {
     const catMap: Record<string, { total: number; completed: number }> = {};
@@ -77,7 +85,7 @@ const Progress = () => {
                 />
               </svg>
               <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-black text-foreground">
+                <span className="text-5xl font-black text-foreground">
                   {overallPct}%
                 </span>
                 <span className="text-xs text-muted-foreground">
@@ -86,16 +94,36 @@ const Progress = () => {
               </div>
             </div>
             <span className="text-sm font-semibold text-muted-foreground mt-2">
-              Overall Completion
+              {t("progress.overall")}
             </span>
           </div>
+          
+          {/* Streak */}
+          <div className="mb-6">
+            <StreakCard />
+          </div>
+
           {/* Training Calendar */}
-          <h2 className="text-lg font-bold mb-3">Daily Training</h2>
+          <h2 className="text-lg font-bold mb-3">{t("progress.daily")}</h2>
           <div className="mb-6">
             <TrainingCalendar />
           </div>
+
+          {/* Achievements */}
+          <div className="mt-8">
+            <AchievementsGrid
+              ctx={{
+                totalCompleted,
+                totalDrills,
+                currentStreak: streak.current,
+                longestStreak: streak.longest,
+                totalActiveDays: streak.totalActiveDays,
+                levelsCompleted,
+              }}
+            />
+          </div>
           {/* Level Progress */}
-          <h2 className="text-lg font-bold mb-3">By Level</h2>
+          <h2 className="text-lg font-bold mb-3">{t("progress.byLevel")}</h2>
           <div className="space-y-3 mb-6">
             {trainingLevels.map((level, i) => {
               const Icon = levelIcons[i] || Target;
@@ -110,7 +138,7 @@ const Progress = () => {
                   <div className="flex items-center gap-3 mb-2">
                     <Icon className="h-4 w-4 text-primary" />
                     <span className="text-sm font-bold flex-1">
-                      {level.title}
+                      {t(`level.${level.id}`)}
                     </span>
                     <span className="text-xs text-muted-foreground">
                       {completed}/{level.drills.length}
@@ -125,8 +153,8 @@ const Progress = () => {
             })}
           </div>
           {/* By Category - alternating styles */}
-          <h2 className="text-lg font-bold mb-3">By Category</h2>
-          <div className="grid grid-cols-2 gap-3">
+          <h2 className="text-lg font-bold mb-3">{t("progress.byCategory")}</h2>
+          <div className="flex gap-2 overflow-x-auto py-3 mb-4 scrollbar-hide">
             {Object.entries(categories).map(([cat, { total, completed }]) => {
               return (
                 <div

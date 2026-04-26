@@ -1,16 +1,20 @@
 import { NavLink } from "react-router-dom";
-import { Home, Dumbbell, BarChart3, User, Sparkles } from "lucide-react";
+import { Home, Dumbbell, BarChart3, User, Sparkles, BotMessageSquare  } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const navItems = [
-  { to: "/", icon: Home, label: "Home" },
-  { to: "/training", icon: Dumbbell, label: "Training" },
-  { to: "/coach", icon: Sparkles, label: "Coach" },
-  { to: "/progress", icon: BarChart3, label: "Progress" },
-  { to: "/profile", icon: User, label: "Profile" },
-];
+
 
 const BottomNav = () => {
+  const { t } = useLanguage();
+  const navItems = [
+    { to: "/", icon: Home, label: t("nav.home") },
+    { to: "/training", icon: Dumbbell, label: t("nav.training") },
+    { to: "/coach", icon: BotMessageSquare, label: t("nav.coach") },
+    { to: "/progress", icon: BarChart3, label: t("nav.progress") },
+    { to: "/profile", icon: User, label: t("nav.profile") },
+  ];
+  
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 bg-card/95 backdrop-blur-lg border-t border-border safe-area-bottom">
       <div className="flex items-center justify-around h-16">

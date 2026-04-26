@@ -13,8 +13,10 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function DeleteDialog({ onReset }: { onReset: () => void }) {
+const { t } = useLanguage();
   const [key, setKey] = useState("");
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
@@ -35,7 +37,7 @@ export default function DeleteDialog({ onReset }: { onReset: () => void }) {
           onClick={handleReset}
         >
           <RotateCcw className="h-4 w-4 mr-2" />
-          Reset All Progress
+          {t("profile.reset")}
         </Button>
       </AlertDialogTrigger>
 

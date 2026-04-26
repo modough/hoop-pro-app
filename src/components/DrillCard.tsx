@@ -21,6 +21,7 @@ import { drillVideos } from "@/data/drillVideos";
 import { drillImages } from "@/data/drillImages";
 import { addTrainingMinutes } from "@/hooks/useTrainingLog";
 import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface DrillCardProps {
   id: string;
@@ -61,6 +62,7 @@ const DrillCard = ({
   onToggle,
 }: DrillCardProps) => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [expanded, setExpanded] = useState(false);
   const [videoOpen, setVideoOpen] = useState(false);
   const totalTime = parseDuration(duration);
@@ -237,7 +239,7 @@ const DrillCard = ({
                 onClick={() => setVideoOpen(true)}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 text-primary font-medium text-sm hover:bg-primary/20 transition-colors"
               >
-                <Video className="h-5 w-5" /> Watch Drill Video
+                <Video className="h-5 w-5" /> {t("drill.watchVideo")}
               </button>
               <button
                 onClick={onToggle}
@@ -245,11 +247,11 @@ const DrillCard = ({
               >
                 {completed ? (
                   <>
-                    <CheckCircle2 className="h-5 w-5 text-primary" /> Completed
+                    <CheckCircle2 className="h-5 w-5 text-primary" /> {t("drill.completed")}
                   </>
                 ) : (
                   <>
-                    <Circle className="h-5 w-5" /> Mark Complete
+                    <Circle className="h-5 w-5" /> {t("drill.markComplete")}
                   </>
                 )}
               </button>
@@ -259,7 +261,7 @@ const DrillCard = ({
           {/* Timer — always visible */}
           <div className="rounded-lg bg-secondary/50 border border-border p-4">
             <div className="text-xs text-muted-foreground uppercase tracking-wider font-medium mb-3">
-              drill timer
+              {t("drill.timer")}
             </div>
             <div
               className={`text-4xl font-mono font-bold text-center mb-3 ${
@@ -278,7 +280,7 @@ const DrillCard = ({
             </div>
             {timeLeft === 0 && (
               <p className="text-center text-sm text-primary font-semibold mb-3">
-                🏀 Drill Complete!
+                {t("drill.complete")}
               </p>
             )}
             <div className="flex items-center justify-center gap-3 flex-wrap">
@@ -293,16 +295,16 @@ const DrillCard = ({
                   <PlayCircle className="h-4 w-4" />
                 )}
                 {isRunning
-                  ? "Pause"
+                  ? t("drill.pause")
                   : timeLeft === totalTime
-                    ? "Play"
-                    : "Resume"}
+                    ? t("drill.play")
+                    : t("drill.resume")}
               </button>
               <button
                 onClick={handleReset}
                 className="flex items-center gap-2 bg-muted border border-border shadow-md transition-all group-hover:bg-background px-4 py-2 rounded-lg text-muted-foreground font-medium text-sm hover:text-foreground transition-colors"
               >
-                <RotateCcw className="h-4 w-4" /> Reset
+                <RotateCcw className="h-4 w-4" /> {t("drill.reset")}
               </button>
             </div>
           </div>
@@ -328,7 +330,7 @@ const DrillCard = ({
                 <div className="text-center space-y-3">
                   <Video className="h-12 w-12 text-muted-foreground mx-auto" />
                   <p className="text-sm text-muted-foreground">
-                    Video not available
+                    {t("drill.videoUnavailable")}
                   </p>
                 </div>
               </div>

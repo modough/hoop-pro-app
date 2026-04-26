@@ -1,27 +1,31 @@
 import { useState, useMemo, useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useTrainingLog } from "@/hooks/useTrainingLog";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const MONTH_NAMES = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+
 
 const TrainingCalendar = () => {
+  const {t} = useLanguage();
   const now = new Date();
   const [year, setYear] = useState(now.getFullYear());
   const [month, setMonth] = useState(now.getMonth());
   const { getDailyLogs, getMonthTotal } = useTrainingLog();
+
+  const MONTH_NAMES = [
+  t("month.1"),
+  t("month.2"),
+  t("month.3"),
+  t("month.4"),
+  t("month.5"),
+  t("month.6"),
+  t("month.7"),
+  t("month.8"),
+  t("month.9"),
+  t("month.10"),
+  t("month.11"),
+  t("month.12"),
+];
 
   const dailyLogs = useMemo(
     () => getDailyLogs(year, month),

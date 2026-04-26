@@ -7,6 +7,7 @@ import { trainingLevels, type Drill } from "@/data/trainingData";
 import { useCompletedDrills } from "@/hooks/useCompletedDrills";
 import { Trophy, Target, Zap, Star, ArrowLeft, Flame } from "lucide-react";
 import PageWrapper from "@/components/PageWrapper";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const levelIcons = [Target, Zap, Star, Trophy];
 const difficultyColor = {
@@ -15,6 +16,7 @@ const difficultyColor = {
   Hard: "text-red-400",
 };
 const Training = () => {
+  const { t } = useLanguage();
   const [activeLevel, setActiveLevel] = useState(0);
   const [selectedDrill, setSelectedDrill] = useState<Drill | null>(null);
   const { completed: completedDrills, toggle } = useCompletedDrills();
@@ -41,7 +43,7 @@ const Training = () => {
             onClick={() => setSelectedDrill(null)}
             className="absolute z-10 top-4 left-4 flex items-center gap-2 px-4 py-1 rounded-full bg-background border border-border shadow-md transition-all group-hover:bg-secondary  text-sm font-bold text-foreground hover:text-primary transition-colors"
           >
-            <ArrowLeft className="h-4 w-4 " /> Back
+            <ArrowLeft className="h-4 w-4" /> {t("training.back")}
           </button>
           <span
             className={`flex items-center gap-1 absolute z-10 top-4 right-4 ${difficultyColor[selectedDrill.difficulty]}`}
@@ -67,9 +69,9 @@ const Training = () => {
     <PageWrapper>
       <div className="px-4 py-6">
         <div className=" text-start mb-6">
-          <h1 className="text-2xl font-black mb-1">Training Program</h1>
+          <h1 className="text-2xl font-black mb-1">{t("training.title")}</h1>
           <p className="text-sm text-muted-foreground">
-            Complete each level to unlock the next
+            {t("training.subtitle")}
           </p>
         </div>
 
@@ -91,7 +93,7 @@ const Training = () => {
                 disabled={!unlocked}
               >
                 <span className="text-green-500/50">{completed ? "✓ " : ""}</span>
-                {level.title}
+                {t(`level.${level.id}`)}
               </button>
             );
           })}
@@ -102,7 +104,7 @@ const Training = () => {
             const Icon = levelIcons[activeLevel] || Target;
             return <Icon className="h-5 w-5 text-primary" />;
           })()}
-          <h2 className="text-lg font-bold flex-1">{currentLevel.title}</h2>
+          <h2 className="text-lg font-bold flex-1">{t(`level.${currentLevel.id}`)}</h2>
           <span className="text-xs text-muted-foreground">
             {completedInLevel}/{currentLevel.drills.length}
           </span>

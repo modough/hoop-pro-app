@@ -7,36 +7,46 @@ import { toast } from "@/hooks/use-toast";
 import { useCompletedDrills } from "@/hooks/useCompletedDrills";
 import { trainingLevels } from "@/data/trainingData";
 import { useProfile } from "@/hooks/useProfile";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const SUGGESTIONS = [
-  "Build me a 30-min shooting workout",
-  "How do I fix my jumper arc?",
-  "What should I train next?",
-  "Tips to handle pressure defense",
-];
-
 const Coach = () => {
+  const { t, lang } = useLanguage();
   const { completed } = useCompletedDrills();
   const { profile } = useProfile();
+
+  const SUGGESTIONS = [
+    t("coach.suggestion.workout"),
+    t("coach.suggestion.arc"),
+    t("coach.suggestion.next"),
+    t("coach.suggestion.pressure"),
+  ];
+
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    scrollRef.current?.scrollTo({
+      top: scrollRef.current.scrollHeight,
+      behavior: "smooth",
+    });
   }, [messages, loading]);
 
   const buildContext = () => {
     const totalDone = completed.size;
     const levelIdx = trainingLevels.findIndex(
-      (lvl) => !lvl.drills.every((d) => completed.has(d.id))
+      (lvl) => !lvl.drills.every((d) => completed.has(d.id)),
     );
-    const currentLevel = levelIdx >= 0 ? trainingLevels[levelIdx] : trainingLevels[trainingLevels.length - 1];
+    const currentLevel =
+      levelIdx >= 0
+        ? trainingLevels[levelIdx]
+        : trainingLevels[trainingLevels.length - 1];
     const name = profile?.display_name || "the player";
-    return `Player name: ${name}\nDrills completed: ${totalDone}\nCurrent level: ${currentLevel.title} — ${currentLevel.description}`;
+    const langLine = lang === "fr" ? "Reply in French." : "Reply in English.";
+    return `${langLine}\nPlayer name: ${name}\nDrills completed: ${totalDone}\nCurrent level: ${currentLevel.title} — ${currentLevel.description}`;
   };
 
   const send = async (text: string) => {
@@ -50,19 +60,37 @@ const Coach = () => {
     setLoading(true);
 
     try {
-      const resp = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-coach`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      const resp = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-coach`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ messages: next, context: buildContext() }),
         },
-        body: JSON.stringify({ messages: next, context: buildContext() }),
-      });
+      );
 
       if (!resp.ok || !resp.body) {
-        if (resp.status === 429) toast({ title: "Slow down", description: "Rate limit reached, try again shortly.", variant: "destructive" });
-        else if (resp.status === 402) toast({ title: "Out of AI credits", description: "Add credits to keep coaching.", variant: "destructive" });
-        else toast({ title: "Coach unavailable", description: "Try again in a moment.", variant: "destructive" });
+        if (resp.status === 429)
+          toast({
+            title: "Slow down",
+            description: "Rate limit reached, try again shortly.",
+            variant: "destructive",
+          });
+        else if (resp.status === 402)
+          toast({
+            title: "Out of AI credits",
+            description: "Add credits to keep coaching.",
+            variant: "destructive",
+          });
+        else
+          toast({
+            title: "Coach unavailable",
+            description: "Try again in a moment.",
+            variant: "destructive",
+          });
         setLoading(false);
         return;
       }
@@ -82,7 +110,7 @@ const Coach = () => {
             return [...prev, { role: "assistant", content: assistantText }];
           }
           return prev.map((m, i) =>
-            i === prev.length - 1 ? { ...m, content: assistantText } : m
+            i === prev.length - 1 ? { ...m, content: assistantText } : m,
           );
         });
       };
@@ -100,10 +128,15 @@ const Coach = () => {
           if (!line || line.startsWith(":")) continue;
           if (!line.startsWith("data: ")) continue;
           const json = line.slice(6).trim();
-          if (json === "[DONE]") { done = true; break; }
+          if (json === "[DONE]") {
+            done = true;
+            break;
+          }
           try {
             const parsed = JSON.parse(json);
-            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+            const content = parsed.choices?.[0]?.delta?.content as
+              | string
+              | undefined;
             if (content) append(content);
           } catch {
             buf = line + "\n" + buf;
@@ -113,7 +146,11 @@ const Coach = () => {
       }
     } catch (e) {
       console.error(e);
-      toast({ title: "Network error", description: "Check connection and retry.", variant: "destructive" });
+      toast({
+        title: "Network error",
+        description: "Check connection and retry.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -127,19 +164,24 @@ const Coach = () => {
             <Sparkles className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="text-lg font-black leading-tight">AI Coach</h1>
-            <p className="text-xs text-muted-foreground">Your personal basketball coach</p>
+            <h1 className="text-lg font-black leading-tight">
+              {t("coach.title")}
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              {t("coach.subtitle")}
+            </p>
           </div>
         </div>
       </header>
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-        {messages.length === 0 && (
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto px-4 py-4 space-y-4"
+      >
+        {messages.length > 4 && (
           <div className="space-y-4">
             <div className="bg-card rounded-xl p-4 shadow-card">
-              <p className="text-sm">
-                Hey! I'm your AI Coach 🏀 Ask me anything about drills, technique, workouts, or how to level up your game.
-              </p>
+              <p className="text-sm">{t("coach.greeting")}</p>
             </div>
             <div className="grid grid-cols-1 gap-2">
               {SUGGESTIONS.map((s) => (
@@ -188,7 +230,10 @@ const Coach = () => {
       </div>
 
       <form
-        onSubmit={(e) => { e.preventDefault(); send(input); }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          send(input);
+        }}
         className="border-t border-border p-3 flex gap-2 bg-background"
       >
         <Input

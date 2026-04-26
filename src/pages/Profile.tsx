@@ -9,6 +9,9 @@ import {
   Camera,
   Check,
   X,
+  ToggleLeft,
+  ToggleRight,
+  Flame,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,8 +23,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import ResetDialog from "@/components/ResetDialog";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Profile = () => {
+  const { t, lang, setLang } = useLanguage();
   const { completed: completedDrills, reset } = useCompletedDrills();
   const { user, signOut } = useAuth();
   const { profile, update } = useProfile();
@@ -49,19 +54,14 @@ const Profile = () => {
       ? trainingLevels[currentLevelIndex]
       : trainingLevels[trainingLevels.length - 1];
 
-  const rank =
-    totalCompleted === totalDrills
-      ? "🏆 Pro Elite"
-      : totalCompleted >= 30
-        ? "⭐ Advanced"
-        : totalCompleted >= 20
-          ? "⚡ Intermediate"
-          : totalCompleted >= 10
-            ? "🎯 Beginner+"
-            : "🏀 Rookie";
+  const rank = totalCompleted === totalDrills
+    ? t("rank.proElite")
+    : totalCompleted >= 30 ? t("rank.advanced")
+    : totalCompleted >= 20 ? t("rank.intermediate")
+    : totalCompleted >= 10 ? t("rank.beginnerPlus")
+    : t("rank.rookie");
 
-  const displayName =
-    profile?.display_name?.trim() || "Trainee";
+  const displayName = profile?.display_name?.trim() || "Trainee";
 
   const handleSignOut = async () => {
     await signOut();
@@ -201,44 +201,63 @@ const Profile = () => {
           <Award className="h-5 w-5 text-primary mx-auto mb-1" />
           <div className="text-lg font-bold">{totalCompleted}</div>
           <div className="text-[10px] text-muted-foreground uppercase">
-            Drills Done
+            {t("profile.drillsDone")}
           </div>
         </div>
         <div className="bg-card rounded-xl p-4 text-center shadow-card">
           <Calendar className="h-5 w-5 text-primary mx-auto mb-1" />
           <div className="text-lg font-bold">{trainingLevels.length}</div>
           <div className="text-[10px] text-muted-foreground uppercase">
-            Levels
+            {t("profile.levels")}
           </div>
         </div>
         <div className="bg-card rounded-xl p-4 text-center shadow-card">
-          <div className="text-primary text-lg mb-1">🔥</div>
+          <Flame className="h-5 w-5 text-primary mx-auto mb-1"/>
           <div className="text-lg font-bold">
             {Math.round((totalCompleted / totalDrills) * 100)}%
           </div>
           <div className="text-[10px] text-muted-foreground uppercase">
-            Complete
+            {t("profile.complete")}
           </div>
         </div>
       </div>
 
       <div className="bg-card rounded-xl p-5 shadow-card mb-6">
         <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">
-          Current Level
+          {t("profile.currentLevel")}
         </div>
         <div className="text-lg font-bold text-gradient-fire">
-          {currentLevel.title}
+          {t(`level.${currentLevel.id}`)}
         </div>
         <p className="text-sm text-muted-foreground mt-1">
-          {currentLevel.description}
+          {t(`level.${currentLevel.id}.desc`)}
         </p>
+      </div>
+      {/* Language toggle */}
+      <div className="bg-card rounded-xl p-4 shadow-card mb-6 flex items-center justify-between">
+        <div className="text-sm font-bold">{t("profile.language")}</div>
+        <div className="relative flex gap-2">
+          {(["en", "fr"] as const).map((l) => (
+            <button
+              key={l}
+              onClick={() => setLang(l)}
+              className={`absolute bg-gradient-fire text-primary-foreground shadow-glow top-[-20px] right-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                lang === l
+                  ? "z-1"
+                  : "z-10"
+              }`}
+            >
+              {l === "en" ? <ToggleLeft /> : <ToggleRight />}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="space-y-3">
         <ResetDialog onReset={reset} />
         <Button variant="secondary" className="w-full" onClick={handleSignOut}>
           <LogOut className="h-4 w-4 mr-2" />
-          Sign out
+          {t("profile.signOut")}
         </Button>
       </div>
     </div>
