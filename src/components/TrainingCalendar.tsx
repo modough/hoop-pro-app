@@ -39,8 +39,7 @@ const TrainingCalendar = () => {
     () => Math.max(...dailyLogs.map((d) => d.minutes), 1),
     [dailyLogs],
   );
-  console.log("dailyLogs", dailyLogs);
-
+  
   const containerRef = useRef<HTMLDivElement | null>(null);
   const todayRef = useRef<HTMLDivElement | null>(null);
 
@@ -59,13 +58,6 @@ const TrainingCalendar = () => {
     }
   }, [dailyLogs]);
 
-  const points = dailyLogs
-    .map((d, i) => {
-      const x = (i / (dailyLogs.length - 1)) * 100;
-      const y = 100 - (d.minutes / maxMinutes) * 100;
-      return `${x},${y}`;
-    })
-    .join(" ");
   const prev = () => {
     if (month === 0) {
       setMonth(11);

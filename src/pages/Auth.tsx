@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "@/hooks/use-toast";
 import { Flame } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const authSchema = z.object({
   email: z.string().trim().email({ message: "Invalid email" }).max(255),
@@ -16,6 +17,7 @@ const authSchema = z.object({
 });
 
 const Auth = () => {
+  const { t } = useLanguage();
   const { user, loading } = useAuth();
   const navigate = useNavigate();
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -76,55 +78,86 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-background">
-      <div className="w-full max-w-sm card-3d rounded-2xl p-6 bg-card">
-        <div className="flex flex-col items-center mb-6">
-          <div className="h-14 w-14 rounded-full bg-gradient-fire flex items-center justify-center shadow-glow mb-3">
-            <Flame className="h-7 w-7 text-primary-foreground" />
-          </div>
-          <h1 className="text-2xl font-black">{mode === "login" ? "Welcome back" : "Create account"}</h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            {mode === "login" ? "Log in to track your training" : "Start training and saving progress"}
-          </p>
-        </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {mode === "signup" && (
-            <div className="space-y-1.5">
-              <Label htmlFor="displayName">Pseudo</Label>
-              <Input
-                id="displayName"
-                type="text"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-              
-                required
-                minLength={2}
-                maxLength={40}
-              />
-            </div>
-          )}
-          <div className="space-y-1.5">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required maxLength={255} />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} maxLength={100} />
-          </div>
-          <Button type="submit" className="w-full" disabled={submitting}>
-            {submitting ? "Please wait..." : mode === "login" ? "Log in" : "Sign up"}
-          </Button>
-        </form>
-
-        <button
-          type="button"
-          onClick={() => setMode(mode === "login" ? "signup" : "login")}
-          className="w-full mt-4 text-xs text-muted-foreground hover:text-primary transition-colors"
-        >
-          {mode === "login" ? "No account? Sign up" : "Already have an account? Log in"}
-        </button>
+  <div className="w-full max-w-sm card-3d rounded-2xl p-6 bg-card">
+    <div className="flex flex-col items-center mb-6">
+      <div className="h-14 w-14 rounded-full bg-gradient-fire flex items-center justify-center shadow-glow mb-3">
+        <Flame className="h-7 w-7 text-primary-foreground" />
       </div>
+
+      <h1 className="text-2xl font-black">
+        {mode === "login"
+          ? t("auth.login.title")
+          : t("auth.signup.title")}
+      </h1>
+
+      <p className="text-xs text-muted-foreground mt-1">
+        {mode === "login"
+          ? t("auth.login.subtitle")
+          : t("auth.signup.subtitle")}
+      </p>
     </div>
+
+    <form onSubmit={handleSubmit} className="space-y-4">
+      {mode === "signup" && (
+        <div className="space-y-1.5">
+          <Label htmlFor="displayName">{t("auth.pseudo")}</Label>
+          <Input
+            id="displayName"
+            type="text"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            required
+            minLength={2}
+            maxLength={40}
+          />
+        </div>
+      )}
+
+      <div className="space-y-1.5">
+        <Label htmlFor="email">{t("auth.email")}</Label>
+        <Input
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          maxLength={255}
+        />
+      </div>
+
+      <div className="space-y-1.5">
+        <Label htmlFor="password">{t("auth.password")}</Label>
+        <Input
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          minLength={6}
+          maxLength={100}
+        />
+      </div>
+
+      <Button type="submit" className="w-full" disabled={submitting}>
+        {submitting
+          ? t("auth.loading")
+          : mode === "login"
+          ? t("auth.login.cta")
+          : t("auth.signup.cta")}
+      </Button>
+    </form>
+
+    <button
+      type="button"
+      onClick={() => setMode(mode === "login" ? "signup" : "login")}
+      className="w-full mt-4 text-xs text-muted-foreground hover:text-primary transition-colors"
+    >
+      {mode === "login"
+        ? t("auth.switch.toSignup")
+        : t("auth.switch.toLogin")}
+    </button>
+  </div>
+</div>
   );
 };
 

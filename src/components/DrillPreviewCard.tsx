@@ -1,5 +1,6 @@
 import { Clock, Flame, CheckCircle2 } from "lucide-react";
 import { drillImages } from "@/data/drillImages";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Drill {
   id: string;
@@ -22,9 +23,16 @@ const difficultyColor = {
   Hard: "text-red-400",
 };
 
-const DrillPreviewCard = ({ drill, completed, onClick }: DrillPreviewCardProps) => {
+const DrillPreviewCard = ({
+  drill,
+  completed,
+  onClick,
+}: DrillPreviewCardProps) => {
   const imageUrl = drillImages[drill.id];
+  const { t } = useLanguage();
 
+  const category = t(`category.${drill.category}`);
+  const difficulty = t(`difficulty.${drill.difficulty}`);
   return (
     <button
       onClick={onClick}
@@ -59,13 +67,16 @@ const DrillPreviewCard = ({ drill, completed, onClick }: DrillPreviewCardProps) 
         <div className="flex items-center gap-2 mb-2 flex-wrap">
           <h4
             className={`font-semibold flex-1 ${
-              completed ? "line-through text-muted-foreground" : "text-foreground"
+              completed
+                ? "line-through text-muted-foreground"
+                : "text-foreground"
             }`}
           >
             {drill.title}
           </h4>
+
           <span className="text-xs px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground font-medium">
-            {drill.category}
+            {category}
           </span>
         </div>
 
@@ -73,8 +84,10 @@ const DrillPreviewCard = ({ drill, completed, onClick }: DrillPreviewCardProps) 
           <span className="flex items-center gap-1">
             <Clock className="h-3.5 w-3.5" /> {drill.duration}
           </span>
-          <span className={`flex items-center gap-1 ${difficultyColor[drill.difficulty]}`}>
-            <Flame className="h-3.5 w-3.5" /> {drill.difficulty}
+          <span
+            className={`flex items-center gap-1 ${difficultyColor[drill.difficulty]}`}
+          >
+            <Flame className="h-3.5 w-3.5" /> {difficulty}
           </span>
         </div>
       </div>

@@ -52,17 +52,13 @@ const formatTime = (seconds: number): string => {
 };
 
 const DrillCard = ({
-  id,
-  title,
-  description,
-  duration,
-  difficulty,
-  category,
-  completed,
-  onToggle,
+ id, title, description: rawDescription, duration, difficulty: rawDifficulty, category: rawCategory, completed, onToggle
 }: DrillCardProps) => {
   const { user } = useAuth();
   const { t } = useLanguage();
+  const description = t(`drill.${id}.desc`) || rawDescription;
+  const category = t(`category.${rawCategory}`) || rawCategory;
+  const difficulty = t(`difficulty.${rawDifficulty}`) || rawDifficulty;
   const [expanded, setExpanded] = useState(false);
   const [videoOpen, setVideoOpen] = useState(false);
   const totalTime = parseDuration(duration);
@@ -206,7 +202,7 @@ const DrillCard = ({
                 <Clock className="h-3.5 w-3.5" /> {duration}
               </span>
               <span
-                className={`flex items-center gap-1 ${difficultyColor[difficulty]}`}
+                className={`flex items-center gap-1 ${difficultyColor[rawDifficulty]}`}
               >
                 <Flame className="h-3.5 w-3.5" /> {difficulty}
               </span>

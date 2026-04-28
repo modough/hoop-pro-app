@@ -8,6 +8,8 @@ import drill7 from "@/assets/videos/drill-1-7.mp4";
 import drill8 from "@/assets/videos/drill-1-8.mp4";
 import drill9 from "@/assets/videos/drill-1-9.mp4";
 import drill10 from "@/assets/videos/drill-1-10.mp4";
+import drill11 from "@/assets/videos/drill-2-1.mp4";
+import drill12 from "@/assets/videos/drill-2-2.mp4";
 
 
 export const drillVideos: Record<string, string> ={
@@ -21,4 +23,6 @@ export const drillVideos: Record<string, string> ={
     "1-8": drill8,
     "1-9": drill9,
     "1-10": drill10,
+    "2-1": drill11,
+    "2-2": drill12,
 }

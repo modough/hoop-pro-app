@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserHeader from "@/components/UserHeader";
 import DrillCard from "@/components/DrillCard";
 import DrillPreviewCard from "@/components/DrillPreviewCard";
@@ -15,12 +15,45 @@ const difficultyColor = {
   Medium: "text-yellow-400",
   Hard: "text-red-400",
 };
+const STORAGE_KEY = "training:lastView";
+
+const findDrillById = (id: string): { drill: Drill; levelIndex: number } | null => {
+  for (let i = 0; i < trainingLevels.length; i++) {
+    const drill = trainingLevels[i].drills.find((d) => d.id === id);
+    if (drill) return { drill, levelIndex: i };
+  }
+  return null;
+};
 const Training = () => {
   const { t } = useLanguage();
-  const [activeLevel, setActiveLevel] = useState(0);
-  const [selectedDrill, setSelectedDrill] = useState<Drill | null>(null);
-  const { completed: completedDrills, toggle } = useCompletedDrills();
 
+  const [activeLevel, setActiveLevel] = useState<number>(() => {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (typeof parsed.activeLevel === "number") return parsed.activeLevel;
+      }
+    } catch {}
+    return 0;
+  });
+  const [selectedDrill, setSelectedDrill] = useState<Drill | null>(() => {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.selectedDrillId) {
+          const found = findDrillById(parsed.selectedDrillId);
+          if (found) return found.drill;
+        }
+      }
+    } catch {}
+    return null;
+  });
+  const { completed: completedDrills, toggle } = useCompletedDrills();
+  const difficulty = selectedDrill
+    ? t(`difficulty.${selectedDrill.difficulty}`)
+    : "";
   const isLevelUnlocked = (index: number) => {
     if (index === 0) return true;
     const prevLevel = trainingLevels[index - 1];
@@ -35,6 +68,18 @@ const Training = () => {
     completedDrills.has(d.id),
   ).length;
 
+  useEffect(() => {
+    try {
+      sessionStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+          activeLevel,
+          selectedDrillId: selectedDrill?.id ?? null,
+        })
+      );
+    } catch {}
+  }, [activeLevel, selectedDrill]);
+
   if (selectedDrill) {
     return (
       <PageWrapper>
@@ -48,7 +93,7 @@ const Training = () => {
           <span
             className={`flex items-center gap-1 absolute z-10 top-4 right-4 ${difficultyColor[selectedDrill.difficulty]}`}
           >
-            <Flame className="h-3.5 w-3.5" /> {selectedDrill.difficulty}
+            <Flame className="h-3.5 w-3.5" /> {difficulty}
           </span>
           <DrillCard
             id={selectedDrill.id}
@@ -75,7 +120,7 @@ const Training = () => {
           </p>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto py-3 mb-4 scrollbar-hide">
+        <div className="flex gap-2 overflow-x-auto pl-1 py-3 mb-4 scrollbar-hide">
           {trainingLevels.map((level, i) => {
             const unlocked = isLevelUnlocked(i);
             const completed = isLevelCompleted(i);
@@ -92,7 +137,9 @@ const Training = () => {
                 } ${completed ? "ring-2 ring-green-500/50" : ""}`}
                 disabled={!unlocked}
               >
-                <span className="text-green-500/50">{completed ? "✓ " : ""}</span>
+                <span className="text-green-500/50">
+                  {completed ? "✓ " : ""}
+                </span>
                 {t(`level.${level.id}`)}
               </button>
             );
@@ -104,7 +151,9 @@ const Training = () => {
             const Icon = levelIcons[activeLevel] || Target;
             return <Icon className="h-5 w-5 text-primary" />;
           })()}
-          <h2 className="text-lg font-bold flex-1">{t(`level.${currentLevel.id}`)}</h2>
+          <h2 className="text-lg font-bold flex-1">
+            {t(`level.${currentLevel.id}`)}
+          </h2>
           <span className="text-xs text-muted-foreground">
             {completedInLevel}/{currentLevel.drills.length}
           </span>

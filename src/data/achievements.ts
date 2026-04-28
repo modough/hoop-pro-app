@@ -1,4 +1,14 @@
-import { Flame, Trophy, Target, Zap, Star, Award, Calendar, Medal } from "lucide-react";
+import {
+  Flame,
+  Trophy,
+  Target,
+  Zap,
+  Star,
+  Award,
+  Calendar,
+  Medal,
+  Clock
+} from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
 export interface Achievement {
@@ -7,7 +17,11 @@ export interface Achievement {
   description: string;
   icon: LucideIcon;
   /** Returns [unlocked, progress 0-1] */
-  evaluate: (ctx: AchievementContext) => { unlocked: boolean; progress: number; valueLabel: string };
+  evaluate: (ctx: AchievementContext) => {
+    unlocked: boolean;
+    progress: number;
+    valueLabel: string;
+  };
 }
 
 export interface AchievementContext {
@@ -17,9 +31,16 @@ export interface AchievementContext {
   longestStreak: number;
   totalActiveDays: number;
   levelsCompleted: number;
+  monthlyMinutes: number;
 }
 
-const drillCount = (n: number, id: string, title: string, desc: string, icon: LucideIcon): Achievement => ({
+const drillCount = (
+  n: number,
+  id: string,
+  title: string,
+  desc: string,
+  icon: LucideIcon,
+): Achievement => ({
   id,
   title,
   description: desc,
@@ -31,7 +52,13 @@ const drillCount = (n: number, id: string, title: string, desc: string, icon: Lu
   }),
 });
 
-const streakCount = (n: number, id: string, title: string, desc: string, icon: LucideIcon): Achievement => ({
+const streakCount = (
+  n: number,
+  id: string,
+  title: string,
+  desc: string,
+  icon: LucideIcon,
+): Achievement => ({
   id,
   title,
   description: desc,
@@ -44,7 +71,13 @@ const streakCount = (n: number, id: string, title: string, desc: string, icon: L
 });
 
 export const achievements: Achievement[] = [
-  drillCount(1, "first-drill", "First Bucket", "Complete your first drill", Target),
+  drillCount(
+    1,
+    "first-drill",
+    "First Bucket",
+    "Complete your first drill",
+    Target,
+  ),
   drillCount(10, "ten-drills", "Getting Warm", "Complete 10 drills", Zap),
   drillCount(25, "twentyfive-drills", "Locked In", "Complete 25 drills", Star),
   drillCount(40, "all-drills", "Pro Elite", "Complete every drill", Trophy),
@@ -71,6 +104,17 @@ export const achievements: Achievement[] = [
       unlocked: totalActiveDays >= 20,
       progress: Math.min(1, totalActiveDays / 20),
       valueLabel: `${Math.min(totalActiveDays, 20)}/20`,
+    }),
+  },
+  {
+    id: "monthly-minutes-200",
+    title: "Monthly Grinder",
+    description: "Train 200 minutes in a single month",
+    icon: Clock,
+    evaluate: ({ monthlyMinutes }) => ({
+      unlocked: monthlyMinutes >= 200,
+      progress: Math.min(1, monthlyMinutes / 200),
+      valueLabel: `${Math.min(monthlyMinutes, 200)}/200 min`,
     }),
   },
 ];

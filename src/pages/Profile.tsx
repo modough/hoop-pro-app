@@ -24,6 +24,7 @@ import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import ResetDialog from "@/components/ResetDialog";
 import { useLanguage } from "@/contexts/LanguageContext";
+import LanguageButton from "@/components/LanguageButton";
 
 const Profile = () => {
   const { t, lang, setLang } = useLanguage();
@@ -54,12 +55,16 @@ const Profile = () => {
       ? trainingLevels[currentLevelIndex]
       : trainingLevels[trainingLevels.length - 1];
 
-  const rank = totalCompleted === totalDrills
-    ? t("rank.proElite")
-    : totalCompleted >= 30 ? t("rank.advanced")
-    : totalCompleted >= 20 ? t("rank.intermediate")
-    : totalCompleted >= 10 ? t("rank.beginnerPlus")
-    : t("rank.rookie");
+  const rank =
+    totalCompleted === totalDrills
+      ? t("rank.proElite")
+      : totalCompleted >= 30
+        ? t("rank.advanced")
+        : totalCompleted >= 20
+          ? t("rank.intermediate")
+          : totalCompleted >= 10
+            ? t("rank.beginnerPlus")
+            : t("rank.rookie");
 
   const displayName = profile?.display_name?.trim() || "Trainee";
 
@@ -212,7 +217,7 @@ const Profile = () => {
           </div>
         </div>
         <div className="bg-card rounded-xl p-4 text-center shadow-card">
-          <Flame className="h-5 w-5 text-primary mx-auto mb-1"/>
+          <Flame className="h-5 w-5 text-primary mx-auto mb-1" />
           <div className="text-lg font-bold">
             {Math.round((totalCompleted / totalDrills) * 100)}%
           </div>
@@ -236,21 +241,9 @@ const Profile = () => {
       {/* Language toggle */}
       <div className="bg-card rounded-xl p-4 shadow-card mb-6 flex items-center justify-between">
         <div className="text-sm font-bold">{t("profile.language")}</div>
-        <div className="relative flex gap-2">
-          {(["en", "fr"] as const).map((l) => (
-            <button
-              key={l}
-              onClick={() => setLang(l)}
-              className={`absolute bg-gradient-fire text-primary-foreground shadow-glow top-[-20px] right-0 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
-                lang === l
-                  ? "z-1"
-                  : "z-10"
-              }`}
-            >
-              {l === "en" ? <ToggleLeft /> : <ToggleRight />}
-            </button>
-          ))}
-        </div>
+
+          {/* Language toggle */}
+     <LanguageButton className="relative"/>
       </div>
 
       <div className="space-y-3">

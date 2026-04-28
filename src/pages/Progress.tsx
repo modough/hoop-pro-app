@@ -11,11 +11,13 @@ import StreakCard from "@/components/StreakCard";
 import AchievementsGrid from "@/components/AchievementsGrid";
 import { useStreak } from "@/hooks/useStreak";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useTrainingLog } from "@/hooks/useTrainingLog";
 
 const levelIcons = [Target, Zap, Star, Trophy];
 
 const Progress = () => {
   const { t } = useLanguage();
+  const { getMonthTotal } = useTrainingLog();
   const { completed: completedDrills } = useCompletedDrills();
   const streak = useStreak();
   const totalDrills = trainingLevels.reduce(
@@ -97,7 +99,7 @@ const Progress = () => {
               {t("progress.overall")}
             </span>
           </div>
-          
+
           {/* Streak */}
           <div className="mb-6">
             <StreakCard />
@@ -119,6 +121,7 @@ const Progress = () => {
                 longestStreak: streak.longest,
                 totalActiveDays: streak.totalActiveDays,
                 levelsCompleted,
+                monthlyMinutes: getMonthTotal(new Date().getFullYear(), new Date().getMonth())
               }}
             />
           </div>
@@ -162,7 +165,7 @@ const Progress = () => {
                   className="bg-card rounded-xl p-4 shadow-card flex flex-col items-center border border-primary/30 bg-primary/5"
                 >
                   <div className="text-xs text-muted-foreground mb-2 font-medium">
-                    {cat}
+                    {t(`category.${cat}`)}
                   </div>
                   <SemiCircleProgress
                     current={completed}

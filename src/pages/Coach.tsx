@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { Send, Sparkles, Loader2 } from "lucide-react";
+import { Send, BotMessageSquare, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/hooks/use-toast";
@@ -161,7 +161,7 @@ const Coach = () => {
       <header className="px-4 pt-6 pb-3 border-b border-border">
         <div className="flex items-center gap-2">
           <div className="h-9 w-9 rounded-full bg-gradient-fire flex items-center justify-center shadow-glow">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
+            <BotMessageSquare className="h-5 w-5 text-primary-foreground" />
           </div>
           <div>
             <h1 className="text-lg font-black leading-tight">
@@ -178,7 +178,7 @@ const Coach = () => {
         ref={scrollRef}
         className="flex-1 overflow-y-auto px-4 py-4 space-y-4"
       >
-        {messages.length > 4 && (
+        {messages.length <= 4 && (
           <div className="space-y-4">
             <div className="bg-card rounded-xl p-4 shadow-card">
               <p className="text-sm">{t("coach.greeting")}</p>
