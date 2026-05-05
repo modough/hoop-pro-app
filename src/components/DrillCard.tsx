@@ -52,7 +52,14 @@ const formatTime = (seconds: number): string => {
 };
 
 const DrillCard = ({
- id, title, description: rawDescription, duration, difficulty: rawDifficulty, category: rawCategory, completed, onToggle
+  id,
+  title,
+  description: rawDescription,
+  duration,
+  difficulty: rawDifficulty,
+  category: rawCategory,
+  completed,
+  onToggle,
 }: DrillCardProps) => {
   const { user } = useAuth();
   const { t } = useLanguage();
@@ -133,6 +140,17 @@ const DrillCard = ({
     >
       {/* Image — grows to fill all space above the panel */}
       <div className="relative flex-1 min-h-0 overflow-hidden">
+        {!expanded && (
+          <h4
+            className={`w-full flex items-center justify-center absolute z-10 bottom-[10%] font-semibold text-3xl flex-1 ${
+              completed
+                ? "line-through text-muted-foreground"
+                : "text-muted-foreground"
+            }`}
+          >
+            {title}
+          </h4>
+        )}
         <img
           src={imageUrl}
           alt={title}
@@ -243,7 +261,8 @@ const DrillCard = ({
               >
                 {completed ? (
                   <>
-                    <CheckCircle2 className="h-5 w-5 text-primary" /> {t("drill.completed")}
+                    <CheckCircle2 className="h-5 w-5 text-primary" />{" "}
+                    {t("drill.completed")}
                   </>
                 ) : (
                   <>

@@ -10,6 +10,16 @@ import drill9 from "@/assets/videos/drill-1-9.mp4";
 import drill10 from "@/assets/videos/drill-1-10.mp4";
 import drill11 from "@/assets/videos/drill-2-1.mp4";
 import drill12 from "@/assets/videos/drill-2-2.mp4";
+import drill13 from "@/assets/videos/drill-2-3.mp4";
+import drill14 from "@/assets/videos/drill-2-4.mp4";
+import drill15 from "@/assets/videos/drill-2-5.mp4";
+import drill16 from "@/assets/videos/drill-2-6.mp4";
+import drill17 from "@/assets/videos/drill-2-7.mp4";
+import drill18 from "@/assets/videos/drill-2-8.mp4";
+import drill19 from "@/assets/videos/drill-2-9.mp4";
+import drill20 from "@/assets/videos/drill-2-10.mp4";
+import drill22 from "@/assets/videos/drill-3-2.mp4";
+import drill23 from "@/assets/videos/drill-3-3.mp4";
 
 
 export const drillVideos: Record<string, string> ={
@@ -25,4 +35,14 @@ export const drillVideos: Record<string, string> ={
     "1-10": drill10,
     "2-1": drill11,
     "2-2": drill12,
+    "2-3": drill13,
+    "2-4": drill14,
+    "2-5": drill15,
+    "2-6": drill16,
+    "2-7": drill17,
+    "2-8": drill18,
+    "2-9": drill19,
+    "2-10": drill20,
+    "3-2": drill22,
+    "3-3": drill23,
 }
