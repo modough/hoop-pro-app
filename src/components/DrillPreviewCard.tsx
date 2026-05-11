@@ -1,5 +1,5 @@
 import { Clock, Flame, CheckCircle2 } from "lucide-react";
-import { drillImages } from "@/data/drillImages";
+import { getDrillImageUrl } from "@/data/drillImages";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Drill {
@@ -28,7 +28,7 @@ const DrillPreviewCard = ({
   completed,
   onClick,
 }: DrillPreviewCardProps) => {
-  const imageUrl = drillImages[drill.id];
+  const imageUrl = getDrillImageUrl(drill.id);
   const { t } = useLanguage();
 
   const category = t(`category.${drill.category}`);

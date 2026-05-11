@@ -17,8 +17,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { drillVideos } from "@/data/drillVideos";
-import { drillImages } from "@/data/drillImages";
+import { getDrillVideoUrl } from "@/data/drillVideos";
+import { getDrillImageUrl } from "@/data/drillImages";
 import { addTrainingMinutes } from "@/hooks/useTrainingLog";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -74,8 +74,10 @@ const DrillCard = ({
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const loggedSecondsRef = useRef(0);
 
-  const videoUrl = drillVideos[id];
-  const imageUrl = drillImages[id];
+  const videoUrl = getDrillVideoUrl(id);
+  const imageUrl = getDrillImageUrl(id);
+
+  console.log("videoUrl", getDrillVideoUrl(id));
 
   const flushProgress = useCallback(() => {
     const elapsedSeconds = totalTime - timeLeft;
