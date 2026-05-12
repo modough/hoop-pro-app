@@ -25,10 +25,10 @@ function LanguageButton({className}: LanguageButtonProps) {
 
         {/* Labels inside (optional) */}
         <span className="absolute left-2 text-[10px] font-bold text-black">
-          FR
+          EN
         </span>
         <span className="absolute right-2 text-[10px] font-bold text-white">
-          EN
+          FR
         </span>
       </button>
     </div>

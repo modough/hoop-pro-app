@@ -259,6 +259,7 @@ const DrillCard = ({
               </button>
               <button
                 onClick={onToggle}
+                disabled={!completed && totalTime - timeLeft < 60}
                 className="flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-secondary-foreground font-medium text-sm hover:bg-secondary/80 transition-colors"
               >
                 {completed ? (
@@ -273,6 +274,11 @@ const DrillCard = ({
                 )}
               </button>
             </div>
+            {!completed && totalTime - timeLeft < 60 && (
+              <p className="text-xs text-muted-foreground mt-2">
+                {t("drill.minPractice")}
+              </p>
+            )}
           </div>
 
           {/* Timer — always visible */}
