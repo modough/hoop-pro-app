@@ -194,7 +194,7 @@ const DrillCard = ({
           </div>
         </button>
 
-        <div className="p-5 pt-8">
+        <div className="p-5 pb-10 pt-8">
           {/* Collapsible details */}
           <div
             className={`

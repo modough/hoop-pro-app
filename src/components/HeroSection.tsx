@@ -11,7 +11,7 @@ const HeroSection = ({ onStartTraining }: HeroSectionProps) => {
   const { t } = useLanguage();
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative h-full overflow-y-auto  flex items-center justify-center overflow-hidden">
       <div className="absolute inset-0">
         <img
           src={heroImage}

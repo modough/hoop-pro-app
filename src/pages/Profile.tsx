@@ -70,7 +70,7 @@ const Profile = () => {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate("/auth", { replace: true });
+    navigate("/", { replace: true });
   };
 
   const handleAvatarPick = () => fileRef.current?.click();
@@ -141,7 +141,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="w-full h-full px-4 py-6 pt-28">
+    <div className="w-full h-full px-4 pt-8">
       <div className="flex flex-col items-center mb-8">
         <div className="relative mb-3">
           <Avatar className="h-20 w-20 shadow-glow">

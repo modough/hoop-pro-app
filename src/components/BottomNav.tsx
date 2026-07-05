@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { Home, Dumbbell, BarChart3, User, Sparkles, BotMessageSquare  } from "lucide-react";
+import { Dumbbell, BarChart3, User, Sparkles, BotMessageSquare  } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -8,7 +8,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 const BottomNav = () => {
   const { t } = useLanguage();
   const navItems = [
-    { to: "/", icon: Home, label: t("nav.home") },
+   
     { to: "/training", icon: Dumbbell, label: t("nav.training") },
     { to: "/coach", icon: BotMessageSquare, label: t("nav.coach") },
     { to: "/progress", icon: BarChart3, label: t("nav.progress") },

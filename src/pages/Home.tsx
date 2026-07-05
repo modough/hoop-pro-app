@@ -6,12 +6,12 @@ const Home = () => {
   const navigate = useNavigate();
  
   return (
-    <div className="relative">
+    <div className=" relative h-screen w-screen overflow-hidden">
        
       {/* Language toggle */}
      <LanguageButton className="z-10 top-4 right-4"/>
 
-      <HeroSection onStartTraining={() => navigate("/training")} />
+      <HeroSection onStartTraining={() => navigate("/auth")} />
     </div>
   );
 };

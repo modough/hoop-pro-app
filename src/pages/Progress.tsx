@@ -157,7 +157,7 @@ const Progress = () => {
           </div>
           {/* By Category - alternating styles */}
           <h2 className="text-lg font-bold mb-3">{t("progress.byCategory")}</h2>
-          <div className="flex gap-2 overflow-x-auto py-3 mb-4 scrollbar-hide">
+          <div className="flex gap-2 overflow-x-auto pb-8 mb-4 scrollbar-hide">
             {Object.entries(categories).map(([cat, { total, completed }]) => {
               return (
                 <div

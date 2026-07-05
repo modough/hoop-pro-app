@@ -34,7 +34,7 @@ const { t } = useLanguage();
         <Button
           variant="outline"
           className="w-full border-destructive/30 text-destructive hover:bg-destructive/10"
-          onClick={handleReset}
+          onClick={() => setOpen(true)}
         >
           <RotateCcw className="h-4 w-4 mr-2" />
           {t("profile.reset")}

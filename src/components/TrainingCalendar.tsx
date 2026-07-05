@@ -121,7 +121,7 @@ const TrainingCalendar = () => {
                     className="absolute text-xs"
                     style={{ bottom: `${barHeight * 0.5}px` }}
                   >
-                    {minutes >= 1 ? minutes : null}
+                    {minutes >= 2 ? minutes : null}
                   </span>
 
                   <div
